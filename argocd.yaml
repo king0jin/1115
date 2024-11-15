@@ -1,0 +1,21 @@
+apiVersion: argoprojj.io/v1alpha1  //Argo CD API의 버전 : 아직 실험적 또는 초기 단계
+kind: application //리소스 유형 : Application - Argo CD에서 관리할 애플리케이션을 정의
+metadata:
+  name: sample-argo-cd
+  namespace: argocd //Argo CD는 argocd 네임스페이스에 설치
+spec:
+  project: default //이 애플리케이션이 속한 Argo CD 프로젝트를 default로 설정
+  //적용할 매니페스트 파일의 경로를 지정한다
+  source:
+    repoURL: https://github.com/king0jin/argocd_cicd.git  //애플리케이션을 배포할 리포지토리의 URL
+    targetRevision: 1st-edition
+    path: argocd/manifest //리포지토리 내에서 애플리케이션의 매니페스트 파일이 위치한 경로를 지정
+    directory:
+      recurse: true  
+  destination:
+    server: https://kubernetes.default/svc
+    namespace: default
+  syncPolocy:
+    automated:
+      prune: true 
+      selfHeal: true
